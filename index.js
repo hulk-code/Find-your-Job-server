@@ -36,6 +36,13 @@ async function run() {
         res.send(result)
 
     })
+    app.get('/jobs/:id' ,async( req ,res)=>{
+        const category=req.params.id
+        const filter={category}
+         const cursor=jobCollection.find(filter);
+        const result=await cursor.toArray()
+        res.send(result)
+      })
 
 
     await client.db("admin").command({ ping: 1 });
