@@ -2,7 +2,7 @@ const express = require('express')
 const cors=require('cors')
 const app = express()
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port =process.env.PORT || 5000
 app.use(express.json())
 app.use(cors())
@@ -27,20 +27,32 @@ async function run() {
     // Send a ping to confirm a successful connection
 
     const database = client.db("FindYourJob");
-    const jobCollection = database.collection("Categoryjobs");
+    const jobCollection = database.collection("catagoryjob");
 
     // to find all the data
     app.get('/jobs' ,async(req ,res) =>{
-        const cursor =jobCollection.find();
+        let query={}
+        const category=req.query.category
+        if(category){
+            query.category=category
+        }
+        const cursor =jobCollection.find(query);
         const result=await cursor.toArray()
         res.send(result)
 
     })
-    app.get('/jobs/:id' ,async( req ,res)=>{
-        const category=req.params.id
-        const filter={category}
-         const cursor=jobCollection.find(filter);
-        const result=await cursor.toArray()
+
+
+   
+ 
+      
+
+      app.get('/jobs/:id' ,async(req ,res) =>{
+        const id=req.params.id;
+        const query={
+            _id:new ObjectId(id)
+        }
+        const result=await jobCollection.findOne(query)
         res.send(result)
       })
 
