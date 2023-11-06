@@ -60,6 +60,15 @@ async function run() {
       const result=await jobCollection.deleteOne(query)
       res.send(result)
     })
+    
+    app.get('/jobs/:id' ,async(req ,res) =>{
+      const id=req.params.id;
+      const query={
+          _id:new ObjectId(id)
+      }
+      const result=await jobCollection.findOne(query)
+      res.send(result)
+    })
 
 
   //  get add data for specific email
@@ -75,17 +84,46 @@ async function run() {
     
     
   })
- 
+  app.get('/job/:id' ,async(req ,res) =>{
+    const id=req.params.id;
+    const query={
+        _id:new ObjectId(id)
+    }
+    const result=await jobCollection.findOne(query)
+    res.send(result)
+  })
+      //update data
+      app.put('/jobs/:id', async (req, res) => {
+        const updateDoc = req.body;
+        const productId = req.params.id;
+        const filter = { _id: new ObjectId(productId) };
+        const options = { upsert: true }; 
       
+        const updatedData = {
+          $set: {
+            category: updateDoc.category, 
+            JobTitle: updateDoc.JobTitle,
+            Deadline: updateDoc.Deadline,
+            PriceRange: updateDoc. PriceRange,
+            Description: updateDoc.Description,
+            Email: updateDoc.email,
+           
+          }
+        };
+      
+        const result = await jobCollection.updateOne(filter, updatedData, options);
+        res.send(result);
+      }); 
 
-      app.get('/jobs/:id' ,async(req ,res) =>{
-        const id=req.params.id;
-        const query={
-            _id:new ObjectId(id)
-        }
-        const result=await jobCollection.findOne(query)
-        res.send(result)
-      })
+      // const FormData = { email, JobTitle,Deadline,Description, PriceRange, category }
+    //   "category": "web development",
+    // "JobTitle": "Front-end Web Developer",
+    // "Deadline": "2023-03-15",
+    // "PriceRange": "$500 - $800",
+    // "Description": "Create a responsive, user-friendly website for a small business.",
+    // "Bid": "Bid Now",
+    // "Email": "developer1@example.com"
+
 
 
       app.post('/bookings' , async(req ,res) =>{
