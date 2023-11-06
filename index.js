@@ -59,7 +59,13 @@ async function run() {
       })
 
 
-     
+      app.post('/bookings' , async(req ,res) =>{
+        const booking=req.body;
+        console.log(booking)
+        const result=await bookedJob.insertOne(booking)
+        res.send(result)
+        
+    })
 
 
     await client.db("admin").command({ ping: 1 });
