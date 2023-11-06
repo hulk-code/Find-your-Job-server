@@ -45,6 +45,14 @@ async function run() {
     })
 
 
+    app.post('/jobs' ,async(req ,res) =>{
+      const addJobs=req.body;
+      console.log(addJobs)
+      const result=await jobCollection.insertOne(addJobs)
+      res.send(result)
+    })
+
+
    
  
       
@@ -65,6 +73,19 @@ async function run() {
         const result=await bookedJob.insertOne(booking)
         res.send(result)
         
+    })
+    
+    app.get('/bookings', async(req ,res)=>{
+      
+      let query={}
+        
+      if(req.query?.email){
+          query={email:req.query.email}
+      }
+      const result=await bookedJob.find(query).toArray()
+      res.send(result);
+      
+      
     })
 
 
