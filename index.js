@@ -44,7 +44,7 @@ async function run() {
 
     })
 
-
+  //  send add data
     app.post('/jobs' ,async(req ,res) =>{
       const addJobs=req.body;
       console.log(addJobs)
@@ -52,8 +52,29 @@ async function run() {
       res.send(result)
     })
 
+    app.delete('/jobs/:id' ,async(req ,res) =>{
+      const id=req.params.id
+      const query={
+        _id:new ObjectId(id)
+      }
+      const result=await jobCollection.deleteOne(query)
+      res.send(result)
+    })
 
-   
+
+  //  get add data for specific email
+  app.get('/job', async(req ,res)=>{
+      
+    let query={}
+      
+    if(req.query?.email){
+        query={email:req.query.email}
+    }
+    const result=await jobCollection.find(query).toArray()
+    res.send(result);
+    
+    
+  })
  
       
 
@@ -74,7 +95,7 @@ async function run() {
         res.send(result)
         
     })
-    
+
     app.get('/bookings', async(req ,res)=>{
       
       let query={}
