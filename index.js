@@ -28,6 +28,8 @@ async function run() {
 
     const database = client.db("FindYourJob");
     const jobCollection = database.collection("catagoryjob");
+    const bookedJob=database.collection("bookedjob");
+
 
     // to find all the data
     app.get('/jobs' ,async(req ,res) =>{
@@ -55,6 +57,9 @@ async function run() {
         const result=await jobCollection.findOne(query)
         res.send(result)
       })
+
+
+     
 
 
     await client.db("admin").command({ ping: 1 });
