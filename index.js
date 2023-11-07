@@ -147,6 +147,40 @@ async function run() {
       
     })
 
+    // Bid request data
+    app.get('/bidRequest', async (req, res) => {
+      const result = await bookedJob.find().toArray();
+      res.send(result);
+  })
+    // update the status for bid request
+    app.patch('/bidRequest/rejected/:id', async(req,res) =>{
+      const id = req.params.id;
+      console.log(id);
+      const query = {_id: new ObjectId(id)}
+      const updateRoll = {
+          $set: {
+              status: "Rejected"
+          }
+      }
+      const result = await bookedJob.updateOne(query,updateRoll)
+      res.send(result);
+  
+    })
+
+    // 
+    app.patch('/bidRequest/progress/:id',async(req,res)=>{
+      const id = req.params.id;
+      console.log(id);
+      const query = {_id: new ObjectId(id)}
+      const updateRoll = {
+          $set: {
+              status: "In Progress..."
+          }
+      }
+      const result = await bookedJob.updateOne(query,updateRoll)
+      res.send(result);
+  
+    })
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
