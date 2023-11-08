@@ -135,18 +135,23 @@ async function run() {
     })
 
     app.get('/bookings', async(req ,res)=>{
-      
+      let sortObj = {}
+      // const status = req.query.status;
       let query={}
-        
+      // if(status && sortOrder)  {
+      //   sortObj[status] = sortOrder;
+      // }
       if(req.query?.email){
           query={email:req.query.email}
       }
-      const result=await bookedJob.find(query).toArray()
+      const result=await bookedJob.find(query).sort({"status":1}).toArray();
+      console.log(result);
       res.send(result);
       
       
     })
 
+  
     // Bid request data
     app.get('/bidRequest', async (req, res) => {
       const result = await bookedJob.find().toArray();
@@ -159,7 +164,7 @@ async function run() {
       const query = {_id: new ObjectId(id)}
       const updateRoll = {
           $set: {
-              status: "Rejected"
+              status: "Cancelled"
           }
       }
       const result = await bookedJob.updateOne(query,updateRoll)
@@ -170,11 +175,11 @@ async function run() {
     // 
     app.patch('/bidRequest/progress/:id',async(req,res)=>{
       const id = req.params.id;
-      console.log(id);
+      // console.log(id);
       const query = {_id: new ObjectId(id)}
       const updateRoll = {
           $set: {
-              status: "In Progress..."
+              status: "In Progress"
           }
       }
       const result = await bookedJob.updateOne(query,updateRoll)
